@@ -1,0 +1,36 @@
+{% extends 'base2.html' %}
+
+
+
+{% block title %}
+
+{% endblock title %}
+
+
+ 
+{% block body %}
+<form style="border:1px solid #ccc" method="post">
+    {% csrf_token %}
+  <div class="container">
+    <h1>Create new student</h1>
+    <hr>
+   
+    <label for="email"><b>First name</b></label>
+    <input type="text" placeholder="Enter Email" name="fname" required>
+
+    <label for="email"><b>Last name</b></label>
+    <input type="text" placeholder="Enter Email" name="lname" required>
+    <label for="email"><b>Age</b></label>
+    <input type="text" placeholder="Enter Email" name="age" required>
+    
+   
+    
+
+    <div class="clearfix">
+      <button type="submit" class="signupbtn">Create</button>
+    </div>
+  </div>
+</form> 
+    
+{% endblock body %}
+    

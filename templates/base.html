@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+
+   
+    {% block style %}
+   <link rel="stylesheet" href="{%static 'css/base.css'%}">
+   {% endblock style %} 
+     
+
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <ul>
+    <li><a href="{%url 'student'%}">Student</a></li>
+    <li><a href="{%url 'contact'%}">Contact</a></li>
+    <li><a href="{%url 'about'%}">about</a></li>
+  </ul>
+
+  
+  {% block title %}
+    
+  {% endblock title %}
+    
+
+  {% block body %}
+    
+  {% endblock body %}
+     
+
+</body>
+</html>
