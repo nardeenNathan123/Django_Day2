@@ -16,11 +16,16 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.db import router
+from django.urls import include, path
+from myapi.views import EmployeesFunBaseView, EmployeesFunBaseView2
 from student.views import create, delete_student, home, student,signup,signin
 from student.views import contact
 from student.views import about
-from student.views import updatee 
+from student.views import updatee ,signout
+
+
+from company.views import EmployeeClassView, EmployeeView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/',home,name="home"),
@@ -29,10 +34,24 @@ urlpatterns = [
     path('student/',student,name="student"),
     path('delete_student/<int:id>',delete_student,name="delete_student"),
     path('signup/',signup,name="signup"),
-
     path('login/',signin,name="login"),
     path('create/',create,name="create"),
     path('updatee/<int:id>',updatee,name="updatee"),
+    path('signout/',signout,name="signout"),
+
+
+
+    path('employee/',EmployeeView,name="employee"),
+    # path('team/',EmployeeView2,name="team"),
+    path('team/',EmployeeClassView.as_view(),name="employee"),
+     path('employees-all/',EmployeesFunBaseView,name="employees-all"),
+    path('employees-all-2/',EmployeesFunBaseView2.as_view(),name="employees-all-2"),
+    path('employees-all-3/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls'))
+
+
+
+
 
 
 

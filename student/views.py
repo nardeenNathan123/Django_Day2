@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from student.models import Student,User
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate,login,logout
 
 import json 
 # Create your views here.
@@ -40,10 +42,14 @@ def about(request):
     # return  HttpResponse('hi')
 
 def student(request):
-    students=Student.objects.all()
-    context={}
-    context['students']=students
-    return render(request,'student/home.html',context)
+    if request.session.get('name'):
+    # if request.session.name:    
+        students=Student.objects.all()
+        context={}
+        context['students']=students
+        return render(request,'student/home.html',context)
+    else:
+        return redirect ('signin')
 
 def delete_student(request,id):
     Student.objects.get(id=id).delete()
@@ -60,12 +66,14 @@ def signup(request):
        # print(email,password,name)
         val=User.objects.filter(email=email)
         if val:
-         context = {
-                'error_message': "Invalid email pleas try again"
-            }
-         return render(request,'student/signup.html',context)
-           
-        User.objects.create(email=email,password=password,name=name)
+            context = {
+                    'error_message': "Invalid email pleas try again"
+                }
+            return render(request,'student/signup.html',context)
+            
+        User.objects.create_user(username=name,password=password,email=email)
+   
+        #User.objects.create(email=email,password=password,name=name)
 
         return redirect('student')
     
@@ -75,16 +83,34 @@ def signin(request) :
         return render(request,'student/login.html')
     
     if request.method == 'POST':
-        email=request.POST['email']
+        name=request.POST['name']
         password=request.POST['psw']
         
-        val=User.objects.filter(email=email,password=password)
+       # myuser=User.objects.filter(email=email,password=password)
         
-        if val:
-            return redirect("student")
+        # if myuser:
+        #     return redirect("student")
+        # else:
+        #     context={'error_message':'Incorrect email or password'}
+        #     return render(request,'student/login.html' ,context)
+        auth=authenticate(username=name,password=password)
+        if auth:
+            login(request,auth)
+            request.session['name']=name
+            return redirect('student')
         else:
-            context={'error_message':'Incorrect email or password'}
-            return render(request,'student/login.html' ,context)
+             context={'error_message':'Incorrect email or password'}
+             return render(request,'student/login.html' ,context)
+        
+        #return render(request,'student/login.html')  
+        
+
+        
+
+def signout(request):
+    request.session.clear()
+    logout(request)
+    return redirect('login')         
         
 
 def create(request) :
